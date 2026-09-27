@@ -5,89 +5,55 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#e31b23">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Altas Horas">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>Altas Horas Controle</title>
 <style>
-:root{--bg:#080b0f;--card:#111820;--card2:#18212b;--red:#e31b23;--text:#f5f7fa;--muted:#8e9aa7;--green:#20c77a}
-*{box-sizing:border-box}body{margin:0;background:#05070a;color:var(--text);font-family:Arial,sans-serif}
-.app{max-width:480px;margin:auto;min-height:100vh;background:var(--bg);padding-bottom:80px}
-header{padding:18px 16px 8px;display:flex;justify-content:space-between}.logo{font-weight:900;font-size:20px}.logo span{color:var(--red)}.sub,.hello,.label,small{color:var(--muted)}main{padding:8px 16px}
-.screen{display:none}.screen.active{display:block}h1{font-size:23px;margin:12px 0 4px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card,.item,.form{background:var(--card);border:1px solid #202b36;border-radius:15px;padding:14px}.big{grid-column:1/-1}.value{font-size:23px;font-weight:800;margin-top:6px}.green{color:var(--green)}.red{color:#ff5b62}
-.menu{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}.menu button,.navbtn{background:var(--card);color:white;border:1px solid #202b36;border-radius:12px;padding:12px 5px}
-.list{display:flex;flex-direction:column;gap:9px;margin-top:14px}.item{display:flex;justify-content:space-between;gap:10px}.item small{display:block;margin-top:4px}.pill{font-size:10px;background:#123c2b;color:#6df0ad;padding:5px 7px;border-radius:7px;height:max-content}
-input,select{width:100%;background:#0b1016;color:white;border:1px solid #293541;border-radius:10px;padding:12px;margin:6px 0 12px}.primary{width:100%;background:var(--red);color:white;border:0;border-radius:11px;padding:14px;font-weight:bold}
-.add{position:fixed;right:20px;bottom:90px;width:54px;height:54px;border:0;border-radius:50%;background:var(--red);color:white;font-size:28px}
-nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:#0c1117;border-top:1px solid #202b36;z-index:4}.navin{max-width:480px;margin:auto;display:flex;justify-content:space-around}.navbtn{border:0;background:none!important;color:var(--muted);font-size:11px}.navbtn span{display:block;font-size:19px}.navbtn.active{color:white}
-.install{display:none;background:#171f28;padding:10px 12px;margin:8px 0;border-radius:12px;font-size:12px}.install button{float:right;background:var(--red);color:white;border:0;border-radius:8px;padding:7px 10px}
-.toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:#1c2732;padding:11px 16px;border-radius:10px;display:none;z-index:9}
-</style>
-</head>
-<body>
-<div class="app">
-<header><div><div class="logo">ALTAS <span>HORAS</span></div><div class="sub">Controle da oficina</div></div><div>🔔</div></header>
-<main>
-<div id="install" class="install">Instale o app no celular <button id="installBtn">Instalar</button></div>
-
-<section id="home" class="screen active">
-<h1>Boa noite, Marlon!</h1><div class="hello">Tudo da oficina em um só lugar.</div>
-<div class="grid">
-<div class="card big"><div class="label">Caixa de hoje</div><div class="value" id="caixa">R$ 0,00</div><div class="green">Entradas registradas</div></div>
-<div class="card"><div class="label">Faturamento</div><div class="value" id="fat">R$ 0,00</div></div>
-<div class="card"><div class="label">Serviços</div><div class="value" id="count">0</div></div>
-</div>
-<div class="menu">
-<button onclick="show('servicos')">🔧<br>Serviços</button><button onclick="show('financeiro')">💰<br>Financeiro</button><button onclick="show('estoque')">📦<br>Estoque</button>
-<button onclick="show('clientes')">👥<br>Clientes</button><button onclick="show('relatorios')">📊<br>Relatórios</button><button onclick="show('pessoal')">💵<br>Meu dinheiro</button>
-</div>
-</section>
-
-<section id="servicos" class="screen"><h1>Serviços</h1><div class="hello">Serviços cadastrados neste aparelho</div><div id="serviceList" class="list"></div><button class="add" onclick="show('novo')">+</button></section>
-
-<section id="novo" class="screen"><h1>Novo serviço</h1><div class="form">
-<label>Cliente<input id="cliente" placeholder="Nome"></label><label>Moto / veículo<input id="veiculo" placeholder="Ex.: Titan 150"></label>
-<label>Serviço<input id="servico" placeholder="Ex.: Troca de relação"></label><label>Mão de obra<input id="valor" type="number" step=".01" placeholder="0,00"></label>
-<label>Pagamento<select id="pagamento"><option>Dinheiro</option><option>Pix</option><option>Cartão</option></select></label>
-<button class="primary" onclick="saveService()">Salvar serviço</button></div></section>
-
-<section id="financeiro" class="screen"><h1>Financeiro</h1><div class="grid"><div class="card"><div class="label">Entradas</div><div class="value green" id="entradas">R$ 0,00</div></div><div class="card"><div class="label">Saídas</div><div class="value red" id="saidas">R$ 0,00</div></div><div class="card big"><div class="label">Saldo</div><div class="value" id="saldo">R$ 0,00</div></div></div></section>
-
-<section id="estoque" class="screen"><h1>Estoque</h1><div class="list" id="stockList"></div></section>
-<section id="clientes" class="screen"><h1>Clientes</h1><div class="list" id="clientList"></div></section>
-<section id="relatorios" class="screen"><h1>Relatórios</h1><div class="grid"><div class="card"><div class="label">Faturamento</div><div class="value" id="rfat">R$ 0,00</div></div><div class="card"><div class="label">Serviços</div><div class="value" id="rserv">0</div></div></div></section>
-<section id="pessoal" class="screen"><h1>Meu dinheiro</h1><div class="hello">Separado do caixa da oficina.</div><div class="card"><div class="label">Saldo pessoal</div><div class="value">R$ 0,00</div><p class="label">A área pessoal será ligada ao mesmo banco na próxima etapa.</p></div></section>
-</main>
-<nav><div class="navin">
-<button class="navbtn active" onclick="show('home',this)"><span>⌂</span>Início</button>
-<button class="navbtn" onclick="show('servicos',this)"><span>🔧</span>Serviços</button>
-<button class="navbtn" onclick="show('financeiro',this)"><span>◉</span>Financeiro</button>
-<button class="navbtn" onclick="show('estoque',this)"><span>▣</span>Estoque</button>
-<button class="navbtn" onclick="show('clientes',this)"><span>☰</span>Mais</button>
-</div></nav>
-<div id="toast" class="toast"></div>
-</div>
+:root{--bg:#07090c;--card:#111820;--line:#26313d;--red:#e31b23;--txt:#f5f7fa;--muted:#92a0ad;--green:#22c77a;--yellow:#f2b84b}
+*{box-sizing:border-box}body{margin:0;background:#050608;color:var(--txt);font-family:Arial,sans-serif}.app{max-width:520px;margin:auto;min-height:100vh;background:var(--bg);padding-bottom:82px}
+header{padding:17px 15px 8px;display:flex;justify-content:space-between;align-items:center}.logo{font-weight:900;font-size:20px}.logo b{color:var(--red)}.muted,small{color:var(--muted)}
+main{padding:8px 14px}.screen{display:none}.screen.active{display:block}h1{font-size:24px;margin:10px 0 4px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.card,.row,.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px}.wide{grid-column:1/-1}.val{font-size:22px;font-weight:800;margin-top:5px}.green{color:var(--green)}.red{color:#ff6268}.yellow{color:var(--yellow)}
+button{cursor:pointer}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.btn,.primary{border:0;border-radius:11px;padding:12px;font-weight:700;color:#fff}.btn{background:#1b2631}.primary{background:var(--red);width:100%}
+.list{display:flex;flex-direction:column;gap:8px;margin-top:12px}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.row small{display:block;margin-top:3px}.pill{font-size:10px;border-radius:7px;padding:5px 7px;background:#153d2c;color:#7af0b2}.pill.low{background:#4a3113;color:#ffd37b}
+input,select{width:100%;background:#090e13;color:#fff;border:1px solid #30404f;border-radius:10px;padding:12px;margin:5px 0 11px;font-size:16px}label{font-size:12px;color:var(--muted)}.hide{display:none!important}.auth{padding:28px 16px}.auth .box{margin-top:18px}.status{font-size:12px;color:var(--muted);margin:8px 0}.ai{border-left:3px solid var(--red)}
+nav{position:fixed;bottom:0;left:0;right:0;background:#0c1117;border-top:1px solid var(--line);z-index:5}.navin{max-width:520px;margin:auto;display:flex;justify-content:space-around}.navin button{background:none;border:0;color:var(--muted);padding:10px 5px;font-size:10px}.navin button span{display:block;font-size:18px}.toast{position:fixed;left:50%;bottom:78px;transform:translateX(-50%);background:#1d2935;padding:10px 14px;border-radius:10px;display:none;z-index:10;max-width:90%}
+</style></head><body><div class="app">
+<section id="auth" class="auth"><div class="logo">ALTAS <b>HORAS</b></div><div class="muted">Controle inteligente da borracharia</div><div class="box"><h1>Entrar</h1><label>E-mail<input id="email" type="email"></label><label>Senha<input id="password" type="password"></label><button class="primary" id="login">Entrar</button><div class="actions"><button class="btn" id="signup">Criar acesso</button><button class="btn" id="reset">Recuperar senha</button></div><div id="authStatus" class="status">Seus dados ficam separados por usuário.</div></div></section>
+<div id="inside" class="hide"><header><div><div class="logo">ALTAS <b>HORAS</b></div><small>Estoque • CMV • Lucro</small></div><button class="btn" id="logout">Sair</button></header><main>
+<section id="home" class="screen active"><h1>Painel</h1><div class="muted">Números reais do seu negócio.</div><div class="grid" style="margin-top:12px"><div class="card wide"><small>Faturamento</small><div class="val" id="fat">R$ 0,00</div></div><div class="card"><small>Lucro bruto</small><div class="val green" id="lucro">R$ 0,00</div></div><div class="card"><small>CMV</small><div class="val" id="cmv">0%</div></div><div class="card"><small>Estoque baixo</small><div class="val yellow" id="baixo">0</div></div><div class="card"><small>Valor em estoque</small><div class="val" id="vestoque">R$ 0,00</div></div></div><div class="card ai" style="margin-top:10px"><b>✨ Análise Altas Horas</b><div id="insight" class="status">Cadastre dados para gerar a análise.</div></div><div class="actions"><button class="btn go" data-go="estoque">📦 Estoque</button><button class="btn go" data-go="os">🔧 Nova OS</button><button class="btn go" data-go="financeiro">💰 Financeiro</button><button class="btn go" data-go="config">⚙️ Ajustes</button></div></section>
+<section id="estoque" class="screen"><h1>Estoque</h1><div class="muted">Entrada, saída, custo médio e mínimo.</div><button class="primary" id="novoProduto" style="margin-top:12px">+ Novo produto</button><div id="produtoForm" class="box hide" style="margin-top:10px"><label>Produto<input id="pnome"></label><label>Categoria<input id="pcat"></label><div class="grid"><label>Custo<input id="pcusto" type="number" step=".01"></label><label>Preço<input id="ppreco" type="number" step=".01"></label><label>Quantidade<input id="pqty" type="number" step=".001"></label><label>Mínimo<input id="pmin" type="number" step=".001"></label></div><button class="primary" id="salvarProduto">Salvar</button></div><div id="stockList" class="list"></div></section>
+<section id="os" class="screen"><h1>Ordens de serviço</h1><button class="primary" id="novaOS">+ Nova OS</button><div id="osForm" class="box hide" style="margin-top:10px"><label>Cliente / veículo / serviço<input id="odesc"></label><div class="grid"><label>Valor cobrado<input id="ototal" type="number" step=".01"></label><label>Custo materiais<input id="ocusto" type="number" step=".01"></label></div><label>Pagamento<select id="opag"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Outro</option></select></label><button class="primary" id="salvarOS">Finalizar OS</button></div><div id="osList" class="list"></div></section>
+<section id="financeiro" class="screen"><h1>Financeiro</h1><button class="primary" id="novoFin">+ Lançamento</button><div id="finForm" class="box hide" style="margin-top:10px"><label>Tipo<select id="ftipo"><option value="receita">Receita</option><option value="despesa">Despesa</option></select></label><label>Descrição<input id="fdesc"></label><label>Categoria<input id="fcat"></label><label>Valor<input id="fvalor" type="number" step=".01"></label><button class="primary" id="salvarFin">Salvar</button></div><div id="finList" class="list"></div></section>
+<section id="config" class="screen"><h1>Ajustes</h1><div class="box"><label>Meta mensal<input id="meta" type="number" step=".01"></label><label>CMV máximo desejado (%)<input id="cmvMeta" type="number" step=".1"></label><label>Margem mínima desejada (%)<input id="margemMeta" type="number" step=".1"></label><button class="primary" id="saveConfig">Salvar ajustes</button></div><h1 style="font-size:18px">Serviços e preços</h1><button class="btn" id="novoServico">+ Serviço</button><div id="servForm" class="box hide" style="margin-top:8px"><label>Nome<input id="snome"></label><div class="grid"><label>Preço<input id="spreco" type="number" step=".01"></label><label>Custo estimado<input id="scusto" type="number" step=".01"></label></div><button class="primary" id="saveServico">Salvar</button></div><div id="servList" class="list"></div></section>
+</main><nav><div class="navin"><button class="go" data-go="home"><span>⌂</span>Início</button><button class="go" data-go="os"><span>🔧</span>OS</button><button class="go" data-go="financeiro"><span>◉</span>Financeiro</button><button class="go" data-go="estoque"><span>▣</span>Estoque</button><button class="go" data-go="config"><span>⚙</span>Ajustes</button></div></nav></div><div id="toast" class="toast"></div></div>
 <script>
-const money=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-let db={services:JSON.parse(localStorage.getItem('ah_services')||'[]'), stock:[
-{name:'Kit relação Titan 150',qty:2,price:179.99},{name:'Óleo 10W40',qty:8,price:32},{name:'Pneu 90/90-18',qty:4,price:260}], clients:[]};
-function persist(){localStorage.setItem('ah_services',JSON.stringify(db.services))}
-function show(id,btn){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');if(btn){document.querySelectorAll('.navbtn').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}render()}
-function saveService(){let s={cliente:cliente.value||'Cliente não informado',veiculo:veiculo.value||'Não informado',servico:servico.value||'Serviço',valor:+valor.value||0,pagamento:pagamento.value,data:new Date().toISOString()};db.services.unshift(s);persist();toast('Serviço salvo no aparelho');['cliente','veiculo','servico','valor'].forEach(id=>document.getElementById(id).value='');show('servicos')}
-function render(){
- let total=db.services.reduce((a,s)=>a+s.valor,0);caixa.textContent=money(total);fat.textContent=money(total);entradas.textContent=money(total);saldo.textContent=money(total);saidas.textContent=money(0);count.textContent=db.services.length;rfat.textContent=money(total);rserv.textContent=db.services.length;
- serviceList.innerHTML=db.services.length?db.services.map(s=>`<div class="item"><div><b>${s.cliente}</b><small>${s.veiculo} • ${s.servico} • ${s.pagamento}</small></div><strong>${money(s.valor)}</strong></div>`).join(''):'<div class="card"><div class="label">Nenhum serviço cadastrado.</div></div>';
- stockList.innerHTML=db.stock.map(s=>`<div class="item"><div><b>${s.name}</b><small>Estoque: ${s.qty} • ${money(s.price)}</small></div><span class="pill">${s.qty<=2?'BAIXO':'OK'}</span></div>`).join('');
- clientList.innerHTML=db.clients.length?db.clients.map(c=>`<div class="item"><div><b>${c}</b><small>Cliente cadastrado</small></div></div>`).join(''):'<div class="card"><div class="label">Os clientes serão criados automaticamente pelos serviços.</div></div>';
-}
-function toast(t){let e=document.getElementById('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',1800)}
-let deferred;
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;document.getElementById('install').style.display='block'});
-installBtn.onclick=async()=>{if(deferred){deferred.prompt();await deferred.userChoice;deferred=null}else toast('No iPhone: Compartilhar → Adicionar à Tela de Início')}
-if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
-render();
-</script>
-</body>
-</html>
+const URL='https://vyzukumcubhjysxlvuia.supabase.co',KEY='sb_publishable_i3CovVNZTbgo4E2nHOm__A_uCoYqJkd';let token='',uid='';
+const $=id=>document.getElementById(id),money=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(t){$('toast').textContent=t;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',2200)}
+function hdr(extra={}){return {...extra,apikey:KEY,Authorization:'Bearer '+token,'Content-Type':'application/json'}}
+async function api(path,opt={}){let r=await fetch(URL+'/rest/v1/'+path,{...opt,headers:hdr(opt.headers||{})});if(!r.ok)throw new Error((await r.text()).slice(0,160));let t=await r.text();return t?JSON.parse(t):null}
+async function auth(path,body){let r=await fetch(URL+'/auth/v1/'+path,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify(body)}),j=await r.json();if(!r.ok)throw new Error(j.msg||j.error_description||j.message||'Erro');return j}
+function setSession(j){token=j.access_token;uid=j.user.id;localStorage.setItem('ah_session',JSON.stringify({token,uid}));$('auth').classList.add('hide');$('inside').classList.remove('hide');refresh()}
+$('login').onclick=async()=>{try{setSession(await auth('token?grant_type=password',{email:$('email').value,password:$('password').value}))}catch(e){$('authStatus').textContent=e.message}}
+$('signup').onclick=async()=>{try{let j=await auth('signup',{email:$('email').value,password:$('password').value});if(j.access_token)setSession(j);else $('authStatus').textContent='Conta criada. Confira seu e-mail se a confirmação estiver ativa.'}catch(e){$('authStatus').textContent=e.message}}
+$('reset').onclick=async()=>{try{await auth('recover',{email:$('email').value});$('authStatus').textContent='Pedido de recuperação enviado.'}catch(e){$('authStatus').textContent=e.message}}
+$('logout').onclick=()=>{localStorage.removeItem('ah_session');location.reload()}
+document.querySelectorAll('.go').forEach(b=>b.onclick=()=>show(b.dataset.go));function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');refresh()}function toggle(id){$(id).classList.toggle('hide')}
+$('novoProduto').onclick=()=>toggle('produtoForm');$('novaOS').onclick=()=>toggle('osForm');$('novoFin').onclick=()=>toggle('finForm');$('novoServico').onclick=()=>toggle('servForm');
+$('salvarProduto').onclick=async()=>{try{await api('produtos',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({user_id:uid,nome:$('pnome').value||'Produto',categoria:$('pcat').value||null,custo_medio:+$('pcusto').value||0,preco_venda:+$('ppreco').value||0,quantidade:+$('pqty').value||0,estoque_minimo:+$('pmin').value||0})});toast('Produto salvo');$('produtoForm').classList.add('hide');refresh()}catch(e){toast(e.message)}}
+async function mov(id,tipo){let q=Number(prompt(tipo==='entrada'?'Quantidade que entrou:':'Quantidade que saiu:'));if(!(q>0))return;let custo=tipo==='entrada'?Number(prompt('Custo unitário desta compra:')||0):null;try{await api('movimentos_estoque',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({user_id:uid,produto_id:id,tipo,quantidade:q,custo_unitario:custo||null})});toast('Estoque atualizado');refresh()}catch(e){toast(e.message)}}
+$('salvarOS').onclick=async()=>{try{await api('ordens_servico',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({user_id:uid,status:'finalizada',descricao:$('odesc').value||'Serviço',valor_servicos:+$('ototal').value||0,custo_produtos:+$('ocusto').value||0,forma_pagamento:$('opag').value,finalizada_at:new Date().toISOString()})});toast('OS salva');$('osForm').classList.add('hide');refresh()}catch(e){toast(e.message)}}
+$('salvarFin').onclick=async()=>{try{await api('financeiro',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({user_id:uid,tipo:$('ftipo').value,descricao:$('fdesc').value||'Lançamento',categoria:$('fcat').value||null,valor:+$('fvalor').value||0})});toast('Lançamento salvo');$('finForm').classList.add('hide');refresh()}catch(e){toast(e.message)}}
+$('saveConfig').onclick=async()=>{try{for(const [chave,numero] of [['meta_mensal',+$('meta').value||0],['cmv_meta',+$('cmvMeta').value||0],['margem_meta',+$('margemMeta').value||0]])await api('configuracoes?on_conflict=user_id,chave',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:uid,chave,valor:{numero}})});toast('Ajustes salvos');refresh()}catch(e){toast(e.message)}}
+$('saveServico').onclick=async()=>{try{await api('servicos',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({user_id:uid,nome:$('snome').value||'Serviço',preco:+$('spreco').value||0,custo_estimado:+$('scusto').value||0})});toast('Serviço salvo');$('servForm').classList.add('hide');refresh()}catch(e){toast(e.message)}}
+async function refresh(){if(!token)return;try{let [stock,oss,fin,serv,cfg]=await Promise.all([api('v_estoque_inteligente?select=*&order=nome'),api('v_os_lucro?select=*&order=created_at.desc&limit=50'),api('financeiro?select=*&order=created_at.desc&limit=50'),api('v_servicos_margem?select=*&order=nome'),api('configuracoes?select=*')]);let fatur=oss.filter(x=>x.status==='finalizada').reduce((a,x)=>a+Number(x.total),0),luc=oss.reduce((a,x)=>a+Number(x.lucro_bruto||0),0),cust=oss.reduce((a,x)=>a+Number(x.custo_total||0),0),cmv=fatur?cust/fatur*100:0;$('fat').textContent=money(fatur);$('lucro').textContent=money(luc);$('cmv').textContent=cmv.toFixed(1)+'%';$('baixo').textContent=stock.filter(x=>x.precisa_repor).length;$('vestoque').textContent=money(stock.reduce((a,x)=>a+Number(x.valor_em_estoque||0),0));let cm=Number((cfg.find(x=>x.chave==='cmv_meta')||{valor:{numero:40}}).valor.numero||40),meta=Number((cfg.find(x=>x.chave==='meta_mensal')||{valor:{numero:0}}).valor.numero||0),tips=[];if(cmv>cm)tips.push('CMV acima da meta de '+cm+'%.');if(stock.some(x=>x.precisa_repor))tips.push(stock.filter(x=>x.precisa_repor).length+' item(ns) precisam de reposição.');if(meta>0&&fatur<meta)tips.push('Faltam '+money(meta-fatur)+' para a meta.');$('insight').textContent=tips.join(' ')||'Indicadores dentro das metas cadastradas ou ainda sem dados suficientes.';
+$('stockList').innerHTML=stock.length?stock.map(x=>'<div class="row"><div><b>'+esc(x.nome)+'</b><small>'+x.quantidade+' '+esc(x.unidade)+' • custo '+money(x.custo_medio)+' • venda '+money(x.preco_venda)+'</small></div><div><span class="pill '+(x.precisa_repor?'low':'')+'">'+(x.precisa_repor?'REPOR':'OK')+'</span><br><button class="btn ent" data-id="'+x.id+'">+</button> <button class="btn sai" data-id="'+x.id+'">−</button></div></div>').join(''):'<div class="card muted">Nenhum produto.</div>';document.querySelectorAll('.ent').forEach(b=>b.onclick=()=>mov(b.dataset.id,'entrada'));document.querySelectorAll('.sai').forEach(b=>b.onclick=()=>mov(b.dataset.id,'saida'));
+$('osList').innerHTML=oss.length?oss.map(x=>'<div class="row"><div><b>'+esc(x.descricao||'OS')+'</b><small>CMV '+Number(x.cmv_percentual||0).toFixed(1)+'% • lucro '+money(x.lucro_bruto)+'</small></div><b>'+money(x.total)+'</b></div>').join(''):'<div class="card muted">Nenhuma OS.</div>';
+$('finList').innerHTML=fin.length?fin.map(x=>'<div class="row"><div><b>'+esc(x.descricao)+'</b><small>'+esc(x.categoria||x.tipo)+'</small></div><b class="'+(x.tipo==='receita'?'green':'red')+'">'+money(x.valor)+'</b></div>').join(''):'<div class="card muted">Nenhum lançamento.</div>';
+$('servList').innerHTML=serv.length?serv.map(x=>'<div class="row"><div><b>'+esc(x.nome)+'</b><small>Custo '+money(x.custo_estimado)+' • margem '+Number(x.margem_percentual||0).toFixed(1)+'%</small></div><b>'+money(x.preco)+'</b></div>').join(''):'<div class="card muted">Nenhum serviço.</div>';
+for(const [k,id] of [['meta_mensal','meta'],['cmv_meta','cmvMeta'],['margem_meta','margemMeta']]){let z=cfg.find(x=>x.chave===k);if(z)$(id).value=z.valor.numero??''}}catch(e){toast('Falha ao carregar: '+e.message)}}
+try{let s=JSON.parse(localStorage.getItem('ah_session')||'null');if(s){token=s.token;uid=s.uid;$('auth').classList.add('hide');$('inside').classList.remove('hide');refresh()}}catch(e){}
+if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
+</script></body></html>
